@@ -1,0 +1,55 @@
+cabal-version: 3.8
+name: reproducer
+version: 0
+
+common common
+    default-language:
+        GHC2021
+    default-extensions:
+        ImportQualifiedPost
+    build-depends:
+        base
+      , bytestring
+      , grapesy
+      , async
+    ghc-options:
+        -Wall
+        -Wno-orphans
+        -Wno-x-partial
+
+common common-exe
+    import:
+        common
+    build-depends:
+        reproducer
+    ghc-options:
+        -rtsopts
+        -threaded
+
+library
+    import: common
+    exposed-modules:
+      , Client
+      , Server
+    hs-source-dirs:
+        src
+
+executable server
+    import:
+        common-exe
+    main-is:
+        exe/Server.hs
+
+executable client
+    import:
+        common-exe
+    main-is:
+        exe/Client.hs
+
+executable server-and-client
+    import:
+        common-exe
+    main-is:
+        exe/Both.hs
+    ghc-options:
+        -with-rtsopts=-N
